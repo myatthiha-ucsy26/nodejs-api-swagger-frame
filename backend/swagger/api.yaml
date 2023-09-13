@@ -1,0 +1,616 @@
+openapi: 3.0.2
+servers:
+  - url: http://localhost:3000
+info:
+  description: This is API Doc for NodeJS Frame
+  title: Swagger API Doc for NodeJS Frame
+  version: 1.0.0
+
+tags:
+  - name: Bulletin Board
+    description: Operations about User, Authentication, Post
+components:
+  securitySchemes:
+    bearerAuth:            
+      type: http
+      scheme: bearer
+      bearerFormat: JWT 
+
+paths:
+# User Routes
+  /api/users:
+    get:
+      tags:
+        - Users 
+      summary: Get all users
+      description: Retrieve all users.
+      parameters:
+        - in: query
+          name: page
+          type: integer
+          example: 1
+          description: The number of items to skip before starting to collect the result set.
+        - in: query
+          name: limit
+          type: integer
+          example: 5
+          description: The numbers of items to return.
+      responses:
+        "200":
+          description: Returns all Users
+    
+    post:
+      tags:
+        - Users
+      summary: Create a new user
+      requestBody:
+        description: Create a new user
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "Su Su"
+                  required: true
+                email:
+                  type: string
+                  unique: true
+                  example: susu@gmail.com
+                  required: true
+                password:
+                  type: string
+                  example: "123456789"
+                  required: true
+                profile:
+                  type: string
+                  format: binary
+                  required: true
+                type:
+                  type: string
+                  example: "1"
+                  required: true
+                phone:
+                  type: string
+                  example: "09966789789"
+                  required: true
+                address:
+                  type: string
+                  example: "Yangon"
+                dob:
+                  type: Date
+                  pattern: /([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/
+                  example: "2019-05-17"
+      responses:
+        "200":
+          description: Successful operation
+        "405":
+          description: Invalid input
+
+  /api/users/{userId}:
+    get:
+      tags:
+        - Users
+      summary: Find user by ID
+      description: Retrieve user by id.
+      operationId: getUserById
+      parameters: 
+        - name: userId
+          in: path
+          description: ID of user to return
+          required: true
+          schema:
+          type: string
+        - in: query
+          name: page
+          type: integer
+          example: 1
+          description: The number of items to skip before starting to collect the result set.
+        - in: query
+          name: limit
+          type: integer
+          example: 5
+          description: The numbers of items to return.
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    example: "62fde243b554f4955fdf7914"
+                name:
+                  type: string
+                  example: "Su Su"
+                email:
+                  type: string,
+                  unique: true,
+                  example: "susu@gmail.com"
+                password:
+                  type: string
+                  example: "123456789"
+                profile:
+                  type: string
+                  example: "1.png"
+                type:
+                  type: string
+                  example: "1"
+                phone:
+                  type: string
+                  example: "09966789789"
+                address:
+                  type: string
+                  example: "Yangon"
+                dob:
+                  type: Date
+                  pattern: /([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/
+                  example: "2019-05-17"
+        "404":
+          description: User not found
+    
+    put:
+      tags:
+        - Users
+      summary: Update the user
+      operationId: getUserById
+      parameters: 
+        - name: userId
+          in: path
+          description: ID of user to return
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Update the exiting user
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "Su Su"
+                  required: true
+                email:
+                  type: string,
+                  unique: true,
+                  example: "susu@gmail.com"
+                  required: true
+                password:
+                  type: string
+                  example: "123456789"
+                  required: true
+                profile:
+                  type: string
+                  format: binary
+                  required: true
+                type:
+                  type: string
+                  example: "1"
+                  required: true
+                phone:
+                  type: string
+                  example: "09966789789"
+                  required: true
+                address:
+                  type: string
+                  example: "Yangon"
+                dob:
+                  type: Date
+                  pattern: /([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/
+                  example: "2019-05-17"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    example: "62fde243b554f4955fdf7914"
+                name:
+                  type: string
+                  example: "Su Su"
+                email:
+                  type: string,
+                  unique: true,
+                  example: "susu@gmail.com"
+                password:
+                  type: string
+                  example: "123456789"
+                profile:
+                  type: string
+                  example: "1.png"
+                type:
+                  type: string
+                  example: "1"
+                phone:
+                  type: string
+                  example: "09966789789"
+                address:
+                  type: string
+                  example: "Yangon"
+                dob:
+                  type: Date
+                  pattern: /([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/
+                  example: "2019-05-17"
+        "404":
+          description: User not found
+    
+    delete:
+      tags:
+        - Users
+      summary: Delete user by ID
+      description: Delete user by id.
+      operationId: deleteuser
+      parameters: 
+        - name: userId
+          in: path
+          description: ID of user to return
+          required: true
+          schema:
+          type: string
+      responses:
+        "200":
+          description: Deleted Successfully!
+        "400":
+          description: Invalid user value
+    
+  /api/users/search:
+    post:
+      tags:
+        - Users
+      summary: Get the search users
+      parameters:
+        - in: query
+          name: page
+          type: integer
+          example: 1
+          description: The number of items to skip before starting to collect the result set.
+        - in: query
+          name: limit
+          type: integer
+          example: 5
+          description: The numbers of items to return.
+      requestBody: 
+        description: Name of the user the you want to search
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string 
+                  example: "nilar"
+      responses:
+        "200":
+          description: Returns search users result
+        "400":
+          description: An error occured
+
+# Authentication Routes
+  /api/login:
+    post:
+      tags:
+        - Authenticate User
+      summary: Login function
+      requestBody:
+        description: Login function with email and password
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: email
+                  example: "susu@gmail.com"
+                password:
+                  type: string
+                  example: "123456789"
+      responses:
+        "200":
+          description: Login Successfully!
+        "403":
+          description: Invalid input
+        
+  /api/logout: 
+    get:
+      tags:
+        - Authenticate User
+      security:
+        - bearerAuth: []
+      summary: Logout function
+      responses:
+        "200":
+          description: Logout Successfully!
+        "403":
+          description: Logout API Error
+
+  /api/change_password:
+    post:
+      tags:
+        - Authenticate User
+      summary: Change Password function
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Change Password function
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                oldpassword:
+                  type: string
+                  example: "123456789"
+                newpassword:
+                  type: string
+                  example: "123456789"
+      responses:
+        "200":
+          description: Your password has been updated successfully!
+        "403":
+          description: Change Password API Error
+
+# Post Routes
+  /api/posts:
+    get:
+      tags:
+        - Posts 
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: page
+          type: integer
+          example: 1
+          description: The number of items to skip before starting to collect the result set.
+        - in: query
+          name: limit
+          type: integer
+          example: 5
+          description: The numbers of items to return.
+      summary: Get all post
+      description: Retrieve all post.
+      responses:
+        "200":
+          description: Returns all Posts
+        "403":
+          description: GET Post API Error
+    post:
+      tags:
+        - Posts
+      security:
+        - bearerAuth: []
+      summary: Create the new post
+      requestBody:
+        description: Create a new user
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: "post title"
+                description:
+                  type: string
+                  example: "post description"
+      responses:
+        "200":
+          description: Successful operation
+        "405":
+          description: Invalid input
+  
+  /api/posts/{postID}:
+    get:
+      tags:
+        - Posts
+      security:
+        - bearerAuth: []
+      summary: Get the post with ID
+      operationId: getPostById
+      parameters: 
+        - name: postID
+          in: path
+          description: ID of post to return
+          required: true
+          schema:
+          type: string
+        - in: query
+          name: page
+          type: integer
+          example: 1
+          description: The number of items to skip before starting to collect the result set.
+        - in: query
+          name: limit
+          type: integer
+          example: 5
+          description: The numbers of items to return.
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    example: "62fde243b554f4955fdf7914"
+                  name:
+                    type: string
+                    example: "post title"
+                  description:
+                    type: string
+                    example: "post description"
+        "405":
+          description: Invalid input
+
+    put:
+      tags:
+        - Posts
+      security:
+        - bearerAuth: []
+      summary: Update the post with ID
+      operationId: getPostById
+      parameters: 
+        - name: postID
+          in: path
+          description: ID of post to return
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Update the exiting post
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: "post title"
+                description:
+                  type: string
+                  example: "post description"
+      responses:
+        "200":
+          description: Update Successfully!
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    example: "62fde243b554f4955fdf7914"
+                  name:
+                    type: string
+                    example: "post title"
+                  description:
+                    type: string
+                    example: "post description"
+        "405":
+          description: Invalid input
+
+    delete:
+      tags:
+        - Posts
+      security:
+        - bearerAuth: []
+      summary: Delete the post with ID
+      description: Delete the post with ID.
+      parameters: 
+        - name: postID
+          in: path
+          description: ID of post to return
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Deleted Successfully!
+        "400":
+          description: Invalid post value
+
+  /api/posts/search:
+    post:
+      tags:
+        - Posts
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: page
+          type: integer
+          example: 1
+          description: The number of items to skip before starting to collect the result set.
+        - in: query
+          name: limit
+          type: integer
+          example: 5
+          description: The numbers of items to return.
+      summary: Search the post with title keyword
+      requestBody:
+        description: Search the post with title keyword
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: "post"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    example: "62fde243b554f4955fdf7914"
+                  name:
+                    type: string
+                    example: "post title"
+                  description:
+                    type: string
+                    example: "post description"
+        "405":
+          description: Invalid input
+
+# Post CSV
+  /api/posts/importcsv:
+    post:
+      tags:
+        - Post CSV
+      summary: Upload CSV function
+      security:
+        - bearerAuth: []
+      consumes:
+        - multipart/form-data
+        - application/x-www-form-urlencoded
+        - binary
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        "200":
+          description: File uploaded successfully!!
+        default:
+          description: Couldn't import data into database!
+  
+  /api/posts/exportcsv:
+    post:
+      tags:
+        - Post CSV
+      summary: Download CSV function
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: File download successfully!!
+        default:
+          description: Couldn't download data!
+
